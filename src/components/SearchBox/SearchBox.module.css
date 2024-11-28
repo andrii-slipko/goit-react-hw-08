@@ -1,0 +1,17 @@
+.label {
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input {
+    background-color: inherit;
+    border: 1px solid black;
+    width: 360px;
+    height: 32px;
+    color: black;
+}
+
+.searchbox {
+    margin-left: 40px;
+}
