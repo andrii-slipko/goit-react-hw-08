@@ -1,20 +1,37 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { store, persistor } from './redux/store';
+import React, { useEffect } from 'react'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchContacts, addContact } from './redux/contactsOps';
 import ContactForm from './components/ContactForm/ContactForm';
 import ContactList from './components/ContactList/ContactList';
 import SearchBox from './components/SearchBox/SearchBox';
 
-const App = () => (
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
+const App = () => {
+  const dispatch = useDispatch();
+
+  const contacts = useSelector((state) => state.contacts.items);
+
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+
+  const handleAddContact = async (newContact) => {
+    try {
+      dispatch(addContact(newContact));
+    } catch (error) {
+      console.error('Error adding contact:', error);
+    }
+  };
+
+  return (
+    <div>
       <h1>Phonebook</h1>
-      <ContactForm />
+      <ContactForm onAddContact={handleAddContact} />
       <SearchBox />
-      <ContactList />
-    </PersistGate>
-  </Provider>
-);
+      <ContactList contacts={contacts} />
+    </div>
+  );
+};
 
 export default App;
