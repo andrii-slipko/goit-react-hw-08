@@ -1,0 +1,14 @@
+.nav {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.link{
+    font-size: 20px;
+    font-weight: 700;
+    color: rgb(67, 49, 132);
+    text-decoration: none;
+    text-transform: uppercase;
+    -webkit-tap-highlight-color: transparent;
+}

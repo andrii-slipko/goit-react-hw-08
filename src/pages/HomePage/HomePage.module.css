@@ -1,0 +1,21 @@
+.theme{
+    font-size: 28px;
+    text-transform: uppercase;
+    margin-left: 40px;
+}
+
+.text{
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-left: 40px; 
+    font-weight: 500;
+}
+
+.text2{
+    
+   color: red;
+}
+
+.text3{
+    color: blue;
+}
