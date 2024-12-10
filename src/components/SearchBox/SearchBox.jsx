@@ -5,7 +5,7 @@ import styles from './SearchBox.module.css';
 
 const SearchBox = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(selectNameFilter); 
+  const filter = useSelector(selectNameFilter);
 
   const handleChange = (e) => {
     dispatch(changeFilter(e.target.value));
@@ -18,7 +18,7 @@ const SearchBox = () => {
         type="text"
         value={filter}
         onChange={handleChange} 
-        placeholder="Search contacts"
+        placeholder="Search by name or number"
       />
     </div>
   );

@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 axios.defaults.baseURL = 'https://connections-api.goit.global';
 
@@ -16,11 +16,10 @@ export const login = createAsyncThunk(
   async (credentials, thunkAPI) => {
     try {
       const { data } = await axios.post('/users/login', credentials);
+      localStorage.setItem('token', data.token);  
       return data;
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || 'Invalid email or password.';
-      return thunkAPI.rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -39,16 +38,15 @@ export const register = createAsyncThunk(
   }
 );
 
-
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   try {
     await axios.post('/users/logout');
     clearAuthHeader(); 
+    localStorage.removeItem('token'); 
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data.message || error.message);
   }
 });
-
 
 export const refreshUser = createAsyncThunk(
   'auth/refresh',
