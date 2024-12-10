@@ -16,10 +16,10 @@ export const login = createAsyncThunk(
   async (credentials, thunkAPI) => {
     try {
       const { data } = await axios.post('/users/login', credentials);
-      localStorage.setItem('token', data.token);  
+      localStorage.setItem('token', data.token); 
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.response.data.message || error.message);
     }
   }
 );
@@ -29,24 +29,25 @@ export const register = createAsyncThunk(
   async (credentials, thunkAPI) => {
     try {
       const { data } = await axios.post('/users/signup', credentials);
+      localStorage.setItem('token', data.token); 
       return data;
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || 'Registration failed. This Email has already used.';
-      return thunkAPI.rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(error.response.data.message || error.message);
     }
   }
 );
 
-export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
-  try {
-    await axios.post('/users/logout');
-    clearAuthHeader(); 
-    localStorage.removeItem('token'); 
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data.message || error.message);
+export const logout = createAsyncThunk(
+  'auth/logout',
+  async (_, thunkAPI) => {
+    try {
+      await axios.post('/users/logout');
+      localStorage.removeItem('token'); 
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message || error.message);
+    }
   }
-});
+);
 
 export const refreshUser = createAsyncThunk(
   'auth/refresh',

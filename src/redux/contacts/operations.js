@@ -33,10 +33,13 @@ export const addContact = createAsyncThunk(
   'contacts/addContact',
   async (newContact, thunkAPI) => {
     const token = localStorage.getItem('token');
-
+    
     if (!token) {
+      console.error('No token found in localStorage');
       return thunkAPI.rejectWithValue('No token found');
     }
+
+    console.log('Adding contact:', newContact);
 
     try {
       const response = await axios.post('/contacts', newContact, {
@@ -44,8 +47,10 @@ export const addContact = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-      return response.data; 
+      console.log('Contact added successfully:', response.data);
+      return response.data;
     } catch (error) {
+      console.error('Error adding contact:', error.response || error.message);
       return thunkAPI.rejectWithValue(error.message);
     }
   }
