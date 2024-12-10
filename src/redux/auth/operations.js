@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { logoutSuccess } from './slice';
 
 axios.defaults.baseURL = 'https://connections-api.goit.global';
 
@@ -40,11 +41,21 @@ export const register = createAsyncThunk(
 export const logout = createAsyncThunk(
   'auth/logout',
   async (_, thunkAPI) => {
+    const state = thunkAPI.getState(); 
+    const token = state.auth.token; 
+
+    if (!token) {
+      return thunkAPI.rejectWithValue('No token found');
+    }
+
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+
     try {
-      await axios.post('/users/logout');
+      await axios.post('/users/logout'); 
       localStorage.removeItem('token'); 
+      thunkAPI.dispatch(logoutSuccess()); 
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message || error.message);
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
